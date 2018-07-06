@@ -1,10 +1,9 @@
 {
-  "name": "Start on Heroku: Python",
-  "description": "A barebones Python app, which can easily be deployed to Heroku.",
+  "name": "BibLaTeX Linter",
+  "description": "A simple web app to lint BibLaTeX files.",
   "image": "heroku/python",
-  "repository": "https://github.com/heroku/python-getting-started",
+  "repository": "https://github.com/Pezmc/BibLaTeX-Linter",
   "keywords": ["python", "django" ],
-  "addons": [ "heroku-postgresql" ],
   "env": {
     "SECRET_KEY": {
       "description": "The secret key for the Django application.",
