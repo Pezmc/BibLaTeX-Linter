@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<style>
+#title {
+  width: 720px;
+  border-bottom: 1px solid black;
+}
+#title h1 {
+  margin: 10px 0px;
+}
+#title h1 a {
+  color: black;
+  text-decoration: none;
+}
+#control {
+  clear: both;
+}
+#search {
+  float: left;
+}
+#search input {
+  width: 300px;
+  font-size: 14pt;
+}
+#mode {
+  text-align: right;
+}
+#mode label:first-child {
+  font-weight: bold;
+}
+#mode input {
+  margin-left: 20px;
+}
+.info {
+  margin-top: 10px;
+  padding: 10px;
+  background: #FAFADD;
+  width: 250px;
+  float: right;
+  box-shadow: 1px 1px 1px 1px #ccc;
+  clear: both;
+}
+.info h2 {
+  font-size: 12pt;
+  padding: 0px;
+  margin: 0px;
+}
+.problem {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: #FFBBAA;
+  counter-increment: problem;
+  width: 700px;
+  border: 1px solid #993333;
+  border-left: 5px solid #993333;
+  box-shadow: 1px 1px 1px 1px #ccc;
+  float: left;
+}
+.active {
+  box-shadow: 5px 5px 3px 3px #ccc;
+  position: relative;
+  top: -2px;
+}
+.severe0 {
+  background: #FAFAFA;
+  border: 1px solid black;
+  border-left: 5px solid black;
+}
+.severe1 {
+  background: #FFEEDD;
+}
+.severe2 {
+  background: #FFDDCC;
+}
+.severe3 {
+  background: #FFCCBB;
+}
+.problem_checked {
+  border: 1px solid #339933;
+  border-left: 5px solid #339933;
+}
+.problem h2:before {
+  content: counter(problem) ". "; color: gray;
+}
+.problem h2 {
+  font-size: 12pt;
+  padding: 0px;
+  margin: 0px;
+}
+.problem .links {
+  float: right;
+  position:relative;
+  top: -22px;
+}
+.problem .links a {
+  color: #3333CC;
+}
+.problem .links a:visited {
+  color: #666666;
+}
+.problem .reference {
+  clear: both;
+  font-size: 9pt;
+  margin-left: 20px;
+  font-style:italic;
+  font-weight:bold;
+}
+.problem ul {
+  clear: both;
+}
+.problem .problem_control {
+  float: right;
+  margin: 0px;
+  padding: 0px;
+}
+.problem .bibtex_toggle{
+  text-decoration: underline;
+  font-size: 9pt;
+  cursor: pointer;
+  padding-top: 5px;
+}
+.problem .bibtex {
+  margin-top: 5px;
+  font-family: Monospace;
+  font-size: 8pt;
+  display: none;
+  border: 1px solid black;
+  background-color: #FFFFFF;
+  padding: 5px;
+}
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<script>
+function isInProblemMode() {
+  return $('#mode_problems:checked').val() == 'problems'
+}
+function update() {
+  $('.problem').hide();
+  $('.problem[id*='+$('#search input').val()+']').show();
+  $('.problem .checked').each(function () {
+    if ($(this).attr('checked')) {
+      $(this).parents('.problem').addClass('problem_checked');
+    } else {
+      $(this).parents('.problem').removeClass('problem_checked');
+    }
+  });
+  if (isInProblemMode()) {
+    $('.severe0').hide();
+    $('.problem_checked').hide();
+  }
+}
+$(document).ready(function(){
+  $(".bibtex_toggle").click(function(event){
+    event.preventDefault();
+    $(this).next().slideToggle();
+  });
+  $('#search input').live('input', function() {
+    update();
+  });
+  $('#mode input').change(function() {
+    update();
+  });
+  $("#uncheck_button").click(function(){
+    $('.problem .checked').attr('checked',false);
+    localStorage.clear();
+    update();
+  });
+  $('.problem a').mousedown(function(event) {
+    $('.problem').removeClass('active');
+    $(this).parents('.problem').addClass('active');
+  });
+  $('.problem .checked').change(function(event) {
+    var problem = $(this).parents('.problem');
+    problem.toggleClass('problem_checked');
+    var checked = problem.hasClass('problem_checked');
+    localStorage.setItem(problem.attr('id'),checked);
+    if (checked && isInProblemMode()) {
+      problem.slideUp();
+    }
+  });
+  $('.problem .checked').each(function () {
+    $(this).attr('checked',localStorage.getItem($(this).parents('.problem').attr('id'))=='true');
+  });
+  update();
+});
+</script>
+<div class="container">
+  <div id="title">
+    <h1>Lint Results</h1>
+    <div id="control">
+      <form id="search">
+        <input placeholder="search entry ID ..." />
+      </form>
+      <form id="mode">
+        <label>show entries:</label>
+        <input type="radio" name="mode" id="mode_problems" value="problems" checked="checked" />
+        <label for="mode_problems">problems</label>
+        <input type="radio" name="mode" id="mode_all" value="all" />
+        <label for="mode_all">all</label>
+        <input type="button" value="uncheck all" id="uncheck_button">
+        </button>
+      </form>
+      <br style="clear: both; " />
+    </div>
+  </div>
+  <div class='info'>
+    <h2>Info</h2>
+    <ul>
+      <li># entries: {{ entriesCount }}</li>
+      <li># problems: {{ problemCount }}</li>
+      <ul>
+        <li># missing fields: {{ counterMissingFields }}</li>
+        <li># flawed names: {{ counterFlawedNames }}</li>
+        <li># wrong types: {{ counterWrongTypes }}</li>
+        <li># non-unique id: {{ counterNonUniqueId }}</li>
+        <li># wrong field: {{ counterWrongFieldNames }}</li>
+      </ul>
+    </ul>
+  </div>
+  {% for problem in problems %}
+    {{ problem|safe }}
+  {% endfor %}
+</div>
+
+{% endblock %}
