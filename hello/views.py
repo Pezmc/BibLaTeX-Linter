@@ -1,6 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
+####
+# Linter config
+####
+
+# Libaries to link to
 libraries = [
   ("Scholar", "http://scholar.google.de/scholar?hl=en&q="),
   ("Google", "https://www.google.com/search?q="),
@@ -9,7 +14,8 @@ libraries = [
   ("ACM", "http://dl.acm.org/results.cfm?query="),
 ]
 
-# fields that are required for a specific type of entry
+# Fields that are required for a specific type of entry
+# Adapted from http://mirrors.ibiblio.org/CTAN/macros/latex/contrib/biblatex/doc/biblatex.pdf
 requiredFields = {
   "article": ["author", "title", "journaltitle/journal", "year/date"],
   "book": ["author", "title", "year/date"],
@@ -47,7 +53,26 @@ requiredFields = {
   "electronic": "online",
   "phdthesis": "mastersthesis",
   "www": "online",
-  "school": "mastersthesis"
+  "school": "mastersthesis",
+
+  # unsupported types which use misc
+  "artwork": "misc",
+  "audio": "misc",
+  "also": "misc",
+  "bibnote": "misc",
+  "commentary": "misc",
+  "image": "misc",
+  "jurisdiction": "misc",
+  "legislation": "misc",
+  "legal": "misc",
+  "letter": "misc",
+  "movie": "misc",
+  "music": "misc",
+  "performance": "misc",
+  "review": "misc",
+  "software": "misc",
+  "standard": "misc",
+  "video": "misc",
 }
 
 import string
@@ -126,7 +151,7 @@ def validate(request):
           problem += "<li>" + subproblem + "</li>"
         problem += "</ul>"
         problem += "<form class='problem_control'><label>checked</label><input type='checkbox' class='checked'/></form>"
-        problem += "<div class='bibtex_toggle'>Current BibLaTex Entry</div>"
+        problem += "<div class='bibtex_toggle'>Current BibLaTeX Entry</div>"
         problem += "<div class='bibtex'>" + completeEntry + "</div>"
         problem += "</div>"
         problems.append(problem)
@@ -145,7 +170,7 @@ def validate(request):
         completeEntry += line + "<br />"
       if currentId in usedIds or not usedIds:
         if "=" in line:
-          # biblatex is not case sensitive
+          # BibLaTeX is not case sensitive
           field = line.split("=")[0].strip().lower()
           fields.append(field)
           value = line.split("=")[1].strip("{} ,\n")
