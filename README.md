@@ -1,7 +1,7 @@
 BibLaTeX Linter
 ==============
 
-*A simple web app to valiate BibLaTeX files*
+*A simple web app to lint BibLaTeX files*
 
 BibLaTeX Check is a small Python powered web app, based on [BibLaTeX-Check](https://github.com/Pezmc/BibLaTeX-Check). Paste in a .bib file, and it goes through a list of references and checks if certain required fields are available, for instance, if each publication is assigned a year or if a journal article has a volume and issue number.
 
