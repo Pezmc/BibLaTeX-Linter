@@ -103,13 +103,42 @@ def validate(request):
   counterWrongTypes = 0
   counterNonUniqueId = 0
   counterWrongFieldNames = 0
+  counterMissingCommas = 0
 
   removePunctuationMap = dict((ord(char), None) for char in string.punctuation)
 
   file = request.POST['file']
-  for line in file.splitlines():
+  for (lineNumber, line) in enumerate(file.splitlines()):
     line = line.strip("\n")
+
+    # Staring a new entry
     if line.startswith("@"):
+      fields = []
+      subproblems = []
+
+      currentId = line.split("{")[1].rstrip(",\n")
+
+      if line[-1] != ',':
+        subproblems.append("missing comma at '@" + currentId + "' definition")
+        counterMissingCommas += 1
+
+      if currentId in ids:
+        subproblems.append("non-unique id: '" + currentId + "'")
+        counterNonUniqueId += 1
+      else:
+        ids.append(currentId)
+      currentType = line.split("{")[0].strip("@ ")
+      completeEntry = line + "<br />"
+
+    # Closing out the current entry
+    elif line.startswith("}"):
+      # deactivating comma check also needs commenting these three lines above
+      if lastLine == lineNumber - 1:
+        subproblems = subproblems[:-1]
+        counterMissingCommas -= 1
+
+      completeEntry += line + "<br />"
+
       if currentId in usedIds or not usedIds:
         for fieldName, requiredFieldsType in requiredFields.items():
           if fieldName == currentType.lower():
@@ -136,7 +165,7 @@ def validate(request):
           "' class='problem severe" + str(len(subproblems)) + "'>"
         problem += "<h2>" + currentId + " (" + currentType + ")</h2> "
         problem += "<div class='links'>"
-
+        
         list = []
         for name, site in libraries:
           list.append(
@@ -151,20 +180,10 @@ def validate(request):
           problem += "<li>" + subproblem + "</li>"
         problem += "</ul>"
         problem += "<form class='problem_control'><label>checked</label><input type='checkbox' class='checked'/></form>"
-        problem += "<div class='bibtex_toggle'>Current BibLaTeX Entry</div>"
+        problem += "<div class='bibtex_toggle'>Current BibLaTex Entry</div>"
         problem += "<div class='bibtex'>" + completeEntry + "</div>"
         problem += "</div>"
         problems.append(problem)
-      fields = []
-      subproblems = []
-      currentId = line.split("{")[1].rstrip(",\n")
-      if currentId in ids:
-        subproblems.append("non-unique id: '" + currentId + "'")
-        counterNonUniqueId += 1
-      else:
-        ids.append(currentId)
-      currentType = line.split("{")[0].strip("@ ")
-      completeEntry = line + "<br />"
     else:
       if line != "":
         completeEntry += line + "<br />"
@@ -173,17 +192,29 @@ def validate(request):
           # BibLaTeX is not case sensitive
           field = line.split("=")[0].strip().lower()
           fields.append(field)
-          value = line.split("=")[1].strip("{} ,\n")
+          value = line.split("=")[1].strip(", \n").strip("{} \n")
           if field == "author":
             currentAuthor = filter(
               lambda x: not (x in "\\\"{}"), value.split(" and ")[0])
+            for author in value.split(" and "):
+              comp = author.split(",")
+              if len(comp) == 0:
+                subproblems.append("too little name components for an author in field 'author'")
+              elif len(comp) > 2:
+                subproblems.append("too many name components for an author in field 'author'")
+              elif len(comp) == 2:
+                if comp[0].strip() == "":
+                  subproblems.append("last name of an author in field 'author' empty")
+                if comp[1].strip() == "":
+                  subproblems.append("first name of an author in field 'author' empty")
+
           if field == "citeulike-article-id":
             currentArticleId = value
           if field == "title":
             currentTitle = re.sub(r'\}|\{', r'', value)
 
           ###############################################################
-          # Checks
+          # Additional checks (please (de)activate/extend to your needs)
           ###############################################################
 
           # check if type 'proceedings' might be 'inproceedings'
@@ -215,7 +246,13 @@ def validate(request):
               #counterFlawedNames += 1
               # break
 
-          ###############################################################
+          # check for commas at end of line
+          if line[-1] != ",":
+            subproblems.append("missing comma at end of line, at '" + field + "' field definition." )
+            counterMissingCommas += 1
+            lastLine = lineNumber
+             
+          ###############################################################  
 
   problemCount = counterMissingFields + counterFlawedNames + counterWrongFieldNames + counterWrongTypes + counterNonUniqueId
 
