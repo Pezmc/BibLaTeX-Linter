@@ -3,7 +3,7 @@
   "description": "A simple web app to lint BibLaTeX files.",
   "image": "heroku/python",
   "repository": "https://github.com/Pezmc/BibLaTeX-Linter",
-  "keywords": ["python", "django" ],
+  "keywords": ["python", "django"],
   "env": {
     "SECRET_KEY": {
       "description": "The secret key for the Django application.",

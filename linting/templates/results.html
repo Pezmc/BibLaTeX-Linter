@@ -1,137 +1,137 @@
 {% extends "base.html" %}
-{% load staticfiles %}
 
 {% block content %}
 
 <style>
-#title {
-  width: 720px;
-  border-bottom: 1px solid black;
-}
-#title h1 {
-  margin: 10px 0px;
-}
-#title h1 a {
-  color: black;
-  text-decoration: none;
-}
-#control {
-  clear: both;
-}
-#search {
-  float: left;
-}
-#search input {
-  width: 300px;
-  font-size: 14pt;
-}
-#mode {
-  text-align: right;
-}
-#mode label:first-child {
-  font-weight: bold;
-}
-#mode input {
-  margin-left: 20px;
-}
-.info {
-  margin-top: 10px;
-  padding: 10px;
-  background: #FAFADD;
-  width: 250px;
-  float: right;
-  box-shadow: 1px 1px 1px 1px #ccc;
-  clear: both;
-}
-.info h2 {
-  font-size: 12pt;
-  padding: 0px;
-  margin: 0px;
-}
-.problem {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 10px;
-  background: #FFBBAA;
-  counter-increment: problem;
-  width: 700px;
-  border: 1px solid #993333;
-  border-left: 5px solid #993333;
-  box-shadow: 1px 1px 1px 1px #ccc;
-  float: left;
-}
-.active {
-  box-shadow: 5px 5px 3px 3px #ccc;
-  position: relative;
-  top: -2px;
-}
-.severe0 {
-  background: #FAFAFA;
-  border: 1px solid black;
-  border-left: 5px solid black;
-}
-.severe1 {
-  background: #FFEEDD;
-}
-.severe2 {
-  background: #FFDDCC;
-}
-.severe3 {
-  background: #FFCCBB;
-}
-.problem_checked {
-  border: 1px solid #339933;
-  border-left: 5px solid #339933;
-}
-.problem h2:before {
-  content: counter(problem) ". "; color: gray;
-}
-.problem h2 {
-  font-size: 12pt;
-  padding: 0px;
-  margin: 0px;
-}
-.problem .links {
-  float: right;
-  position:relative;
-  top: -22px;
-}
-.problem .links a {
-  color: #3333CC;
-}
-.problem .links a:visited {
-  color: #666666;
-}
-.problem .reference {
-  clear: both;
-  font-size: 9pt;
-  margin-left: 20px;
-  font-style:italic;
-  font-weight:bold;
-}
-.problem ul {
-  clear: both;
-}
-.problem .problem_control {
-  float: right;
-  margin: 0px;
-  padding: 0px;
-}
-.problem .bibtex_toggle{
-  text-decoration: underline;
-  font-size: 9pt;
-  cursor: pointer;
-  padding-top: 5px;
-}
-.problem .bibtex {
-  margin-top: 5px;
-  font-family: Monospace;
-  font-size: 8pt;
-  display: none;
-  border: 1px solid black;
-  background-color: #FFFFFF;
-  padding: 5px;
-}
+  #title {
+    width: 720px;
+    border-bottom: 1px solid black;
+  }
+  #title h1 {
+    margin: 10px 0px;
+  }
+  #title h1 a {
+    color: black;
+    text-decoration: none;
+  }
+  #control {
+    clear: both;
+  }
+  #search {
+    float: left;
+  }
+  #search input {
+    width: 300px;
+    font-size: 14pt;
+  }
+  #mode {
+    text-align: right;
+  }
+  #mode label:first-child {
+    font-weight: bold;
+  }
+  #mode input {
+    margin-left: 20px;
+  }
+  .info {
+    margin-top: 10px;
+    padding: 10px;
+    background: #fafadd;
+    width: 250px;
+    float: right;
+    box-shadow: 1px 1px 1px 1px #ccc;
+    clear: both;
+  }
+  .info h2 {
+    font-size: 12pt;
+    padding: 0px;
+    margin: 0px;
+  }
+  .problem {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #ffbbaa;
+    counter-increment: problem;
+    width: 700px;
+    border: 1px solid #993333;
+    border-left: 5px solid #993333;
+    box-shadow: 1px 1px 1px 1px #ccc;
+    float: left;
+  }
+  .active {
+    box-shadow: 5px 5px 3px 3px #ccc;
+    position: relative;
+    top: -2px;
+  }
+  .severe0 {
+    background: #fafafa;
+    border: 1px solid black;
+    border-left: 5px solid black;
+  }
+  .severe1 {
+    background: #ffeedd;
+  }
+  .severe2 {
+    background: #ffddcc;
+  }
+  .severe3 {
+    background: #ffccbb;
+  }
+  .problem_checked {
+    border: 1px solid #339933;
+    border-left: 5px solid #339933;
+  }
+  .problem h2:before {
+    content: counter(problem) '. ';
+    color: gray;
+  }
+  .problem h2 {
+    font-size: 12pt;
+    padding: 0px;
+    margin: 0px;
+  }
+  .problem .links {
+    float: right;
+    position: relative;
+    top: -22px;
+  }
+  .problem .links a {
+    color: #3333cc;
+  }
+  .problem .links a:visited {
+    color: #666666;
+  }
+  .problem .reference {
+    clear: both;
+    font-size: 9pt;
+    margin-left: 20px;
+    font-style: italic;
+    font-weight: bold;
+  }
+  .problem ul {
+    clear: both;
+  }
+  .problem .problem_control {
+    float: right;
+    margin: 0px;
+    padding: 0px;
+  }
+  .problem .bibtex_toggle {
+    text-decoration: underline;
+    font-size: 9pt;
+    cursor: pointer;
+    padding-top: 5px;
+  }
+  .problem .bibtex {
+    margin-top: 5px;
+    font-family: Monospace;
+    font-size: 8pt;
+    display: none;
+    border: 1px solid black;
+    background-color: #ffffff;
+    padding: 5px;
+  }
 </style>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
 <script>
