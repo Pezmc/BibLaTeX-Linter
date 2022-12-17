@@ -1,14 +1,14 @@
 # BibLaTeX Linter
 
-_A simple [web app](https://biblatex-linter.herokuapp.com/) to lint BibLaTeX files_
+_A simple [web app](https://biblatex-linter.onrender.com/) to lint BibLaTeX files_
 
-[BibLaTeX Linter](https://biblatex-linter.herokuapp.com/) is a small Python powered web app, based on [BibLaTeX-Check](https://github.com/Pezmc/BibLaTeX-Check). Paste in a .bib file, and it goes through a list of references and checks if certain required fields are available, for instance, if each publication is assigned a year or if a journal article has a volume and issue number.
+[BibLaTeX Linter](https://biblatex-linter.onrender.com/) is a small Python powered web app, based on [BibLaTeX-Check](https://github.com/Pezmc/BibLaTeX-Check). Paste in a .bib file, and it goes through a list of references and checks if certain required fields are available, for instance, if each publication is assigned a year or if a journal article has a volume and issue number.
 
 Please note that it is **not a BibLaTeX validator**. And in the current version, it might not yet be able to parse every valid bib file.
 
 ## Using the website
 
-Head to [https://biblatex-linter.herokuapp.com/](https://biblatex-linter.herokuapp.com/) paste the contents of your .bib file and click validate!
+Head to [https://biblatex-linter.onrender.com/](https://biblatex-linter.onrender.com/) paste the contents of your .bib file and click validate!
 
 ## Running Locally
 
